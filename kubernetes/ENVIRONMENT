@@ -1,0 +1,11 @@
+#!/bin/sh
+
+export SERVER_NAME=oidctest.slac.stanford.edu
+export SERVER_ADMIN=ytl@slac.stanford.edu
+
+export HTTPS_REDIRECT=https://${SERVER_NAME}/
+
+export OIDC_CLIENT_ID="YOUR CLIENT IDENTIFIER"
+export OIDC_CLIENT_SECRET="YOUR CLIENT SECRET"
+export OIDC_REDIRECT_URI=https://${SERVER_NAME}/oidc/redirect
+export OIDC_CRYPTO_PASSPHRASE="A PASSPHRASE OF YOUR CHOOSING"

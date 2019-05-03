@@ -1,0 +1,21 @@
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: www
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+spec:
+  rules:
+    - host: oidctest.slac.stanford.edu
+      http:
+        paths:
+        - path: /
+          backend:
+            serviceName: auth
+            servicePort: 443
+            #serviceName: app
+            #servicePort: 8080
+

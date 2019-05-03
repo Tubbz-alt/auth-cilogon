@@ -1,0 +1,79 @@
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth
+spec:
+  ports:
+  - port: 443
+    targetPort: 443
+  selector:
+    app: auth
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: auth
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      #nodeSelector:
+      #
+      containers:
+        - name: auth
+          imagePullPolicy: Always
+          image: slaclab/apache-auth-oidc:latest
+          ports:
+            - containerPort: 443
+          #livenessProbe:
+          #  httpGet:
+          #    path: /status
+          #    port: 433 
+          #  initialDelaySeconds: 10
+          #  periodSeconds: 10
+          #readinessProbe:
+          #  httpGet:
+          #    path: /status
+          #    port: 433
+          #  initialDelaySeconds: 30
+          #  periodSeconds: 10
+          env:
+          - name: SERVER_NAME
+            value: ${SERVER_NAME}
+          - name: SERVER_ADMIN
+            value: ${SERVER_ADMIN}
+          - name: PROXY_HOST
+            value: app 
+          - name: PROXY_PORT
+            value: "8080"
+          - name: HTTPS_REDIRECT
+            value: ${HTTPS_REDIRECT}
+          - name: OIDC_CLIENT_ID
+            value: ${OIDC_CLIENT_ID}
+          - name: OIDC_CLIENT_SECRET
+            value: ${OIDC_CLIENT_SECRET}
+          - name: OIDC_REDIRECT_URI
+            value: ${OIDC_REDIRECT_URI}
+          - name: OIDC_CRYPTO_PASSPHRASE
+            value: ${OIDC_CRYPTO_PASSPHRASE}
+          - name: REQUIRE_VALID_USER
+            value: '1'
+          - name: GENERATE_DUMMY_CERTS
+            value: '1'
+
+
